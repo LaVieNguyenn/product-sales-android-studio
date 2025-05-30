@@ -37,22 +37,6 @@ Product Sale là ứng dụng Android cho phép người dùng:
 
 ```
 
-app/
-├── src/
-│    └── main/
-│         ├── java/com/example/productsaleandroid/
-│         │     ├── api/             # API interfaces & repository
-│         │     ├── models/          # Model classes (DTO, user, product...)
-│         │     ├── activities/      # Các màn hình (Login, Main, ...)
-│         │     ├── MainActivity.java
-│         │     └── LoginActivity.java
-│         ├── res/
-│         │     ├── layout/          # XML layout files
-│         │     └── drawable/        # Hình ảnh, icon
-│         └── AndroidManifest.xml
-
-````
-
 ---
 
 ## ⚡️ Hướng dẫn cài đặt & chạy
