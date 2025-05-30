@@ -1,0 +1,196 @@
+<!-- res/layout/activity_login.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:gravity="center_horizontal"
+    android:padding="24dp">
+
+    <!-- Logo Shopee -->
+
+    <!-- Tiêu đề -->
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="32dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:text="Login"
+        android:textColor="#212121"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f5f5f7"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <!-- Username -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/user"
+                android:contentDescription="User Icon"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edtUsername"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Email/Phone/UserName "
+                android:inputType="textEmailAddress|text"
+                android:background="@android:color/transparent"
+                android:paddingStart="0dp"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/locked_computer"
+                android:contentDescription="Lock Icon"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:background="@android:color/transparent"
+                android:paddingStart="0dp"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/ivShowPassword"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/hide"
+                android:contentDescription="Show Password"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot?"
+                android:textColor="#F26522"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Button Đăng nhập -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Sign In"
+        android:textSize="17sp"
+        android:textColor="#fff"
+        android:backgroundTint="#F26522"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp"
+        android:stateListAnimator="@null"
+        android:fontFamily="sans-serif-medium"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="6dp" />
+
+    <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="Sign Up"
+            android:textColor="#F26522"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    <!-- Divider  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="10dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#dcdcdc"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Or  "
+            android:textSize="15sp"
+            android:textColor="#757575" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#dcdcdc"/>
+    </LinearLayout>
+
+    <!-- Đăng nhập Google, Facebook, Apple -->
+    <Button
+        android:id="@+id/btnGoogleLogin"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Continue with Google"
+        android:textColor="#212121"
+        android:backgroundTint="#fff"
+        android:stateListAnimator="@null"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnFacebookLogin"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Continue with Facebook"
+        android:textColor="#fff"
+        android:drawableLeft="@drawable/ico_facebook"
+        android:drawableTintMode="screen"
+        android:backgroundTint="#1977F3"
+        android:stateListAnimator="@null"
+        android:layout_marginBottom="8dp" />
+
+</LinearLayout>
