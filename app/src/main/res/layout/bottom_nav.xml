@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    android:background="#FFFFFF"
+    android:weightSum="5">
+
+    <ImageView
+        android:id="@+id/nav_home"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_home"
+        android:scaleType="centerInside"
+        android:padding="12dp"
+        android:contentDescription="Home" />
+
+    <ImageView
+        android:id="@+id/nav_search"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_search"
+        android:scaleType="centerInside"
+        android:padding="12dp"
+        android:contentDescription="Search" />
+
+    <ImageView
+        android:id="@+id/nav_favorite"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_favorite"
+        android:scaleType="centerInside"
+        android:padding="12dp"
+        android:contentDescription="Favorites" />
+
+    <ImageView
+        android:id="@+id/nav_cart"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_cart"
+        android:scaleType="centerInside"
+        android:padding="12dp"
+        android:contentDescription="Cart" />
+
+    <ImageView
+        android:id="@+id/nav_profile"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_user"
+        android:scaleType="centerInside"
+        android:padding="12dp"
+        android:contentDescription="Profile" />
+</LinearLayout>

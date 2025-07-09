@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     String token = response.body().getToken();
                     User user = response.body().getUser();
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     String userJson = new Gson().toJson(user);
 // Kiểm tra log
                     Log.d("DEBUG_USER_JSON", userJson);
