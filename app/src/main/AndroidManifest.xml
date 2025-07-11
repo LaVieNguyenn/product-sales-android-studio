@@ -27,6 +27,7 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".HomeActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ProductDetailActivity"/>
 
     </application>
 
