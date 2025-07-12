@@ -1,7 +1,9 @@
 package com.example.productsaleandroid.models;
-
+import com.google.gson.annotations.SerializedName;
 public class LoginRequest {
+    @SerializedName("email")
     private String Email;
+    @SerializedName("password")
     private String Password;
 
     public LoginRequest(String email, String password) {
