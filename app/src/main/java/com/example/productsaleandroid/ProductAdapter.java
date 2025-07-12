@@ -58,6 +58,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.putExtra("name", product.getProductName());
+            intent.putExtra("technicalSpecification", product.getTechnicalSpecifications());
             intent.putExtra("description", product.getFullDescription()); // dùng mô tả chi tiết hơn
             intent.putExtra("price", product.getPrice());
             intent.putExtra("image", product.getImageURL());
@@ -73,13 +74,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgProduct, ivFavorite;
-        TextView tvProductName, tvBriefDescription, tvPrice;
+        TextView tvProductName, tvBriefDescription, tvPrice, tvTechnicalSpecification;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
             ivFavorite = itemView.findViewById(R.id.ivFavorite);
             tvProductName = itemView.findViewById(R.id.tvProductName);
+            tvTechnicalSpecification = itemView.findViewById(R.id.tvTechnicalSpecification);
             tvBriefDescription = itemView.findViewById(R.id.tvBriefDescription);
             tvPrice = itemView.findViewById(R.id.tvPrice);
         }

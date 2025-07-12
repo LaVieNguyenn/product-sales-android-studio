@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 public class ProductDetailActivity extends AppCompatActivity {
 
     ImageView imgProductDetail;
-    TextView tvProductNameDetail, tvProductPriceDetail, tvProductDescriptionDetail;
+    TextView tvProductNameDetail, tvProductPriceDetail, tvProductDescriptionDetail, tvTechnicalSpecification;
     ImageView btnBack; // Thêm biến nút back
 
     @Override
@@ -22,6 +22,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         imgProductDetail = findViewById(R.id.imgProductDetail);
         tvProductNameDetail = findViewById(R.id.tvProductNameDetail);
+        tvTechnicalSpecification = findViewById(R.id.tvTechnicalSpecification);
         tvProductPriceDetail = findViewById(R.id.tvProductPriceDetail);
         tvProductDescriptionDetail = findViewById(R.id.tvProductDescriptionDetail);
         btnBack = findViewById(R.id.btnBack); // Gán nút back
@@ -36,6 +37,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Lấy dữ liệu từ Intent
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
+        String technicalSpecification = intent.getStringExtra("technicalSpecification");
         String description = intent.getStringExtra("description");
         double price = intent.getDoubleExtra("price", 0);
         String imageUrl = intent.getStringExtra("image");
@@ -43,6 +45,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Hiển thị dữ liệu
         tvProductNameDetail.setText(name);
         tvProductDescriptionDetail.setText(description);
+        tvTechnicalSpecification.setText((technicalSpecification));
         tvProductPriceDetail.setText(String.format("₫%,.0f VND", price));
         TextView tvVoucherPrice = findViewById(R.id.tvVoucherPrice);
         tvVoucherPrice.setText(String.format("₫%,.0f", price));
