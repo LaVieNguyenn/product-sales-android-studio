@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                     String userJson = new Gson().toJson(user);
 // Kiểm tra log
                     Log.d("DEBUG_USER_JSON", userJson);
-
+                    saveLoginInfo(token, user);
                     startActivity(intent);
                     finish();
                 } else {
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveLoginInfo(String token, User user) {
-        SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("token", token);
         editor.putString("user", new Gson().toJson(user));
