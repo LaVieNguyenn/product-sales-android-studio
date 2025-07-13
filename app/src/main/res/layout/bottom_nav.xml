@@ -2,58 +2,139 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bottomNav"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="64dp"
     android:orientation="horizontal"
     android:background="#FFFFFF"
-    android:weightSum="5">
+    android:weightSum="4"
+    >
 
-    <ImageView
+    <!-- Home Tab -->
+    <LinearLayout
         android:id="@+id/nav_home"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_home"
-        android:scaleType="centerInside"
-        android:padding="12dp"
-        android:contentDescription="Home" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/img_home"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_home"
+            android:contentDescription="Trang chủ" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textSize="12sp"
+            android:textColor="#333333"
+            android:gravity="center"/>
+    </LinearLayout>
 
-    <ImageView
+    <!-- Search Tab -->
+    <LinearLayout
         android:id="@+id/nav_search"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_search"
-        android:scaleType="centerInside"
-        android:padding="12dp"
-        android:contentDescription="Search" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="Tìm kiếm" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tìm kiếm"
+            android:textSize="12sp"
+            android:textColor="#333333"
+            android:gravity="center"/>
+    </LinearLayout>
 
-    <ImageView
-        android:id="@+id/nav_favorite"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_favorite"
-        android:scaleType="centerInside"
-        android:padding="12dp"
-        android:contentDescription="Favorites" />
-
-    <ImageView
+    <!-- Cart Tab with Badge -->
+    <LinearLayout
         android:id="@+id/nav_cart"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_cart"
-        android:scaleType="centerInside"
-        android:padding="12dp"
-        android:contentDescription="Cart" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-    <ImageView
+        <FrameLayout
+            android:layout_width="28dp"
+            android:layout_height="28dp">
+
+            <ImageView
+                android:id="@+id/img_cart"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_cart"
+                android:contentDescription="Giỏ hàng" />
+
+            <!-- Badge số lượng -->
+            <TextView
+                android:id="@+id/tvCartBadge"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="0dp"
+                android:background="@drawable/badge_red"
+                android:text="1"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="gone"
+                android:minWidth="16dp"
+                android:minHeight="16dp"
+                android:includeFontPadding="false"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giỏ hàng"
+            android:textSize="12sp"
+            android:textColor="#333333"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Profile Tab -->
+    <LinearLayout
         android:id="@+id/nav_profile"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_user"
-        android:scaleType="centerInside"
-        android:padding="12dp"
-        android:contentDescription="Profile" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/img_profile"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_user"
+            android:contentDescription="Tài khoản" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tài khoản"
+            android:textSize="12sp"
+            android:textColor="#333333"
+            android:gravity="center"/>
+    </LinearLayout>
+
 </LinearLayout>
