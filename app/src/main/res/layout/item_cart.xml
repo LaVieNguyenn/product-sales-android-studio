@@ -1,0 +1,99 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="#fff"
+    android:elevation="1dp"
+    android:layout_marginBottom="6dp">
+
+    <!-- Checkbox chọn -->
+    <CheckBox
+        android:id="@+id/cbItemSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+
+    <!-- Ảnh sản phẩm -->
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_bg_grey"/>
+
+    <!-- Nội dung -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên sản phẩm"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:maxLines="2"
+            android:ellipsize="end"/>
+
+        <!-- Có thể bổ sung màu/variant ở đây nếu muốn -->
+
+        <TextView
+            android:id="@+id/tvProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200,000 đ"
+            android:textSize="15sp"
+            android:textColor="#E53935"
+            android:layout_marginTop="2dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_qty_box"
+            android:gravity="center_vertical">
+
+            <!-- Nút trừ -->
+            <ImageView
+                android:id="@+id/btnMinus"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_minus"
+                android:contentDescription="Trừ"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#333" />
+
+            <!-- Số lượng -->
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="15sp"
+                android:textColor="#222" />
+
+            <!-- Nút cộng -->
+            <ImageView
+                android:id="@+id/btnPlus"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_plus"
+                android:contentDescription="Cộng"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#FF6600" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

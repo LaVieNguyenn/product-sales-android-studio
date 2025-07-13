@@ -1,0 +1,146 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#f7f7f7"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- Header Shopee style -->
+    <LinearLayout
+        android:id="@+id/headerCart"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#fff"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:elevation="2dp">
+
+        <!-- Back -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back"
+            android:tint="#FF6600"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <!-- View giả để cân đối layout -->
+        <View
+            android:layout_width="68dp"
+            android:layout_height="0dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tvCartTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Giỏ hàng (0)"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Chat icon + badge -->
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Sửa"
+            android:textColor="#FF6600"
+            android:textSize="16sp"
+            android:layout_marginEnd="8dp" /> <!-- Thêm dòng này để đẩy "Sửa" qua trái -->
+
+        <FrameLayout
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="2dp"
+            android:layout_marginStart="0dp"> <!-- Có thể tăng nếu muốn cách xa hơn -->
+
+            <ImageView
+                android:id="@+id/btnChat"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_chat"
+                android:tint="#FF6600"
+                android:contentDescription="Chat" />
+
+            <TextView
+                android:id="@+id/tvChatBadge"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_circle_red"
+                android:text="19"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:gravity="center"
+                android:layout_gravity="end|top"
+                android:translationX="0dp"
+                android:translationY="2dp"
+                android:includeFontPadding="false"/>
+        </FrameLayout>
+    </LinearLayout>
+    <!-- List Cart Items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"/>
+
+    <!-- Footer Cart Shopee style -->
+    <LinearLayout
+        android:id="@+id/footerCart"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#fff"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <!-- Chọn tất cả -->
+        <CheckBox
+            android:id="@+id/cbSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tất cả"
+            android:textSize="16sp"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- Tổng cộng -->
+        <TextView
+            android:id="@+id/tvFooterTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tổng cộng đ0"
+            android:textSize="16sp"
+            android:textColor="#333"/>
+
+        <!-- Nút Mua hàng -->
+        <TextView
+            android:id="@+id/tvFooterBuy"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_bg_orange"
+            android:text="Mua hàng (0)"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+</LinearLayout>

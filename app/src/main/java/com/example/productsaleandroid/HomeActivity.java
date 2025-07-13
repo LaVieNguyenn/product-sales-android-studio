@@ -1,8 +1,8 @@
 package com.example.productsaleandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.productsaleandroid.ProductAdapter;
 import com.example.productsaleandroid.api.ApiClient;
 import com.example.productsaleandroid.api.ProductApi;
 import com.example.productsaleandroid.models.Product;
@@ -40,6 +39,18 @@ public class HomeActivity extends AppCompatActivity {
 
         bottomNav.findViewById(R.id.nav_search).setOnClickListener(v ->
                 Toast.makeText(this, "Tìm kiếm", Toast.LENGTH_SHORT).show());
+
+        bottomNav.findViewById(R.id.nav_favorite).setOnClickListener(v ->
+                Toast.makeText(this, "Yêu thích", Toast.LENGTH_SHORT).show());
+
+        bottomNav.findViewById(R.id.nav_cart).setOnClickListener(v -> {
+            // Chuyển sang trang CartActivity
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        bottomNav.findViewById(R.id.nav_profile).setOnClickListener(v ->
+                Toast.makeText(this, "Tài khoản", Toast.LENGTH_SHORT).show());
 
         // RecyclerView
         recyclerView = findViewById(R.id.recyclerProducts);
