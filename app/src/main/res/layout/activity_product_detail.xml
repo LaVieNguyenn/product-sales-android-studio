@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="25dp"
-
+    android:fitsSystemWindows="true"
     android:background="#FAFAFA">
 
     <!-- HEADER -->
@@ -177,7 +176,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:weightSum="3"
-        android:layout_marginBottom="22dp">
+        android:paddingBottom="4dp">>
 
         <!-- Chat ngay -->
         <LinearLayout
@@ -203,13 +202,15 @@
         </LinearLayout>
 
         <!-- Thêm vào Giỏ hàng -->
+
         <LinearLayout
+            android:id="@+id/footer_add_to_cart"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#00BFA6"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="20dp"

@@ -1,5 +1,6 @@
 package com.example.productsaleandroid.api;
 
+import com.example.productsaleandroid.models.AddToCartRequest;
 import com.example.productsaleandroid.models.Cart;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -8,6 +9,7 @@ import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.DELETE;
+import retrofit2.http.POST;
 
 public interface CartApi {
     @GET("api/carts")
@@ -23,5 +25,10 @@ public interface CartApi {
     Call<Void> deleteCartItem(
             @Header("Authorization") String token,
             @Path("id") int cartItemId
+    );
+    @POST("/api/carts/items")
+    Call<Void> addToCart(
+            @Header("Authorization") String token,
+            @Body AddToCartRequest request
     );
 }

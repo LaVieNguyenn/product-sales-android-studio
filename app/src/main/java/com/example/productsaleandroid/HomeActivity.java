@@ -48,7 +48,6 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Tìm kiếm", Toast.LENGTH_SHORT).show());
 
         bottomNav.findViewById(R.id.nav_cart).setOnClickListener(v -> {
-            // Chuyển sang trang CartActivity
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
         });
@@ -61,10 +60,21 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter(this, null);
         recyclerView.setAdapter(adapter);
+
+        // load badge giỏ hàng lần đầu
         loadCartBadgeFromApi();
+
         // Gọi API để lấy danh sách sản phẩm
         loadProducts();
     }
+
+    // GỌI LẠI KHI MÀN HÌNH HOME ĐƯỢC HIỆN LÊN
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCartBadgeFromApi(); // <-- BẮT BUỘC để cập nhật badge mỗi lần quay lại Home
+    }
+
     private void loadCartBadgeFromApi() {
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = prefs.getString("token", "");
@@ -100,6 +110,7 @@ public class HomeActivity extends AppCompatActivity {
             tvCartBadge.setVisibility(View.GONE);
         }
     }
+
     private void loadProducts() {
         ProductApi api = ApiClient.getClient().create(ProductApi.class);
         api.getAllProducts().enqueue(new Callback<List<Product>>() {

@@ -6,6 +6,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,9 +34,17 @@ public class CartActivity extends AppCompatActivity {
     private ImageView btnBack;
     private TextView tvCartTitle, tvEdit, tvChatBadge;
 
-    // Footer
+    // Footer mặc định
+    private LinearLayout footerCart;
     private CheckBox cbSelectAll;
     private TextView tvFooterTotal, tvFooterBuy;
+
+    // Footer edit mode
+    private LinearLayout footerCartEdit;
+    private CheckBox cbSelectAllEdit;
+    private TextView btnSaveToFav, btnDelete;
+
+    private boolean isEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +58,38 @@ public class CartActivity extends AppCompatActivity {
         tvChatBadge = findViewById(R.id.tvChatBadge);
 
         btnBack.setOnClickListener(v -> finish());
-        tvEdit.setOnClickListener(v -> Toast.makeText(this, "Tính năng đang phát triển!", Toast.LENGTH_SHORT).show());
 
-        int chatCount = 19;
-        tvChatBadge.setText(String.valueOf(chatCount));
-        tvChatBadge.setVisibility(chatCount > 0 ? android.view.View.VISIBLE : android.view.View.GONE);
-
-        // Footer
+        // Footer mặc định
+        footerCart = findViewById(R.id.footerCart);
         cbSelectAll = findViewById(R.id.cbSelectAll);
         tvFooterTotal = findViewById(R.id.tvFooterTotal);
         tvFooterBuy = findViewById(R.id.tvFooterBuy);
 
+        // Footer edit mode
+        footerCartEdit = findViewById(R.id.footerCartEdit);
+        cbSelectAllEdit = findViewById(R.id.cbSelectAllEdit);
+        btnSaveToFav = findViewById(R.id.btnSaveToFav);
+        btnDelete = findViewById(R.id.btnDelete);
+
+        // Mặc định footer edit ẩn
+        footerCartEdit.setVisibility(View.GONE);
+
+        tvEdit.setOnClickListener(v -> {
+            isEditMode = !isEditMode;
+            tvEdit.setText(isEditMode ? "Xong" : "Sửa");
+            footerCart.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
+            footerCartEdit.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+            // Nếu adapter có cờ editMode thì update luôn
+            if (cartAdapter != null) {
+                cartAdapter.setEditMode(isEditMode);
+            }
+        });
+
+        int chatCount = 19;
+        tvChatBadge.setText(String.valueOf(chatCount));
+        tvChatBadge.setVisibility(chatCount > 0 ? View.VISIBLE : View.GONE);
+
+        // RecyclerView
         recyclerViewCart = findViewById(R.id.recyclerViewCart);
         recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
 
@@ -76,11 +107,21 @@ public class CartActivity extends AppCompatActivity {
         recyclerViewCart.setAdapter(cartAdapter);
         cartAdapter.setOnItemCheckedChangeListener(() -> {
             updateFooter();
-            updateCartTitle(); // luôn cập nhật lại title
+            updateCartTitle();
         });
 
-        // Chọn tất cả
+        // Chọn tất cả (footer mặc định)
         cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (cartAdapter.getItems() == null) return;
+            for (CartItem item : cartAdapter.getItems()) {
+                item.isSelected = isChecked;
+            }
+            cartAdapter.notifyDataSetChanged();
+            updateFooter();
+        });
+
+        // Chọn tất cả (footer edit mode)
+        cbSelectAllEdit.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (cartAdapter.getItems() == null) return;
             for (CartItem item : cartAdapter.getItems()) {
                 item.isSelected = isChecked;
@@ -97,6 +138,26 @@ public class CartActivity extends AppCompatActivity {
             }
             // Xử lý đặt hàng ở đây (danh sách sản phẩm đã chọn)
             Toast.makeText(this, "Bạn đã chọn " + count + " sản phẩm.", Toast.LENGTH_SHORT).show();
+        });
+
+        btnSaveToFav.setOnClickListener(v -> {
+            int count = getSelectedCount();
+            if (count == 0) {
+                Toast.makeText(this, "Chọn sản phẩm để lưu!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // TODO: API lưu vào đã thích ở đây
+            Toast.makeText(this, "Đã lưu " + count + " sản phẩm vào Đã thích!", Toast.LENGTH_SHORT).show();
+        });
+
+        btnDelete.setOnClickListener(v -> {
+            int count = getSelectedCount();
+            if (count == 0) {
+                Toast.makeText(this, "Chọn sản phẩm để xóa!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // TODO: API xóa sản phẩm khỏi giỏ hàng ở đây
+            Toast.makeText(this, "Đã xóa " + count + " sản phẩm!", Toast.LENGTH_SHORT).show();
         });
 
         loadCartFromApi(token);
@@ -126,7 +187,7 @@ public class CartActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Cart cart = response.body();
                     if (cart.items != null) {
-                        for (CartItem item : cart.items) item.isSelected = false; // tick mặc định theo nhu cầu
+                        for (CartItem item : cart.items) item.isSelected = false;
                     }
                     cartAdapter.setItems(cart.items);
                     updateFooter();
@@ -161,44 +222,75 @@ public class CartActivity extends AppCompatActivity {
         return total;
     }
 
-    // Cập nhật footer
+    // Cập nhật footer phù hợp mode
     private void updateFooter() {
         int selectedCount = getSelectedCount();
         double selectedTotal = getSelectedTotal();
 
-        tvFooterTotal.setText("Tổng cộng đ" + String.format("%,.0f", selectedTotal));
-        tvFooterBuy.setText("Mua hàng (" + selectedCount + ")");
-
-        // Cập nhật trạng thái "chọn tất cả" mà KHÔNG trigger callback
-        List<CartItem> items = cartAdapter.getItems();
-        if (items != null && !items.isEmpty()) {
+        if (!isEditMode) {
+            tvFooterTotal.setText("Tổng cộng đ" + String.format("%,.0f", selectedTotal));
+            tvFooterBuy.setText("Mua hàng (" + selectedCount + ")");
+            // Update "chọn tất cả" ở footer mặc định
+            List<CartItem> items = cartAdapter.getItems();
             boolean allChecked = true;
-            for (CartItem item : items) {
-                if (!item.isSelected) {
-                    allChecked = false;
-                    break;
+            if (items != null && !items.isEmpty()) {
+                for (CartItem item : items) {
+                    if (!item.isSelected) {
+                        allChecked = false;
+                        break;
+                    }
                 }
+                cbSelectAll.setOnCheckedChangeListener(null);
+                cbSelectAll.setChecked(allChecked);
+                cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    for (CartItem item : cartAdapter.getItems()) {
+                        item.isSelected = isChecked;
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    updateFooter();
+                });
+            } else {
+                cbSelectAll.setOnCheckedChangeListener(null);
+                cbSelectAll.setChecked(false);
+                cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    for (CartItem item : cartAdapter.getItems()) {
+                        item.isSelected = isChecked;
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    updateFooter();
+                });
             }
-            cbSelectAll.setOnCheckedChangeListener(null);
-            cbSelectAll.setChecked(allChecked);
-            cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                for (CartItem item : cartAdapter.getItems()) {
-                    item.isSelected = isChecked;
-                }
-                cartAdapter.notifyDataSetChanged();
-                updateFooter();
-            });
         } else {
-            cbSelectAll.setOnCheckedChangeListener(null);
-            cbSelectAll.setChecked(false);
-            cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                for (CartItem item : cartAdapter.getItems()) {
-                    item.isSelected = isChecked;
+            // Update "chọn tất cả" ở footer edit
+            List<CartItem> items = cartAdapter.getItems();
+            boolean allChecked = true;
+            if (items != null && !items.isEmpty()) {
+                for (CartItem item : items) {
+                    if (!item.isSelected) {
+                        allChecked = false;
+                        break;
+                    }
                 }
-                cartAdapter.notifyDataSetChanged();
-                updateFooter();
-
-            });
+                cbSelectAllEdit.setOnCheckedChangeListener(null);
+                cbSelectAllEdit.setChecked(allChecked);
+                cbSelectAllEdit.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    for (CartItem item : cartAdapter.getItems()) {
+                        item.isSelected = isChecked;
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    updateFooter();
+                });
+            } else {
+                cbSelectAllEdit.setOnCheckedChangeListener(null);
+                cbSelectAllEdit.setChecked(false);
+                cbSelectAllEdit.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    for (CartItem item : cartAdapter.getItems()) {
+                        item.isSelected = isChecked;
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    updateFooter();
+                });
+            }
         }
     }
 }

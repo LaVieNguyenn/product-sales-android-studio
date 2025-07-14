@@ -1,3 +1,4 @@
+
 package com.example.productsaleandroid;
 
 import android.content.Context;
@@ -32,6 +33,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private OnItemCheckedChangeListener onItemCheckedChangeListener;
     private String token;
 
+    // Thêm biến edit mode
+    private boolean isEditMode = false;
+
     public CartAdapter(Context context, List<CartItem> items, String token) {
         this.context = context;
         this.items = items;
@@ -46,9 +50,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         }
     }
 
-
     public List<CartItem> getItems() {
         return items;
+    }
+
+    // Hàm chuyển trạng thái edit mode
+    public void setEditMode(boolean editMode) {
+        this.isEditMode = editMode;
+        notifyDataSetChanged();
+    }
+
+    public boolean isEditMode() {
+        return isEditMode;
     }
 
     public interface OnItemCheckedChangeListener {
@@ -70,6 +83,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartItem item = items.get(position);
         Product product = item.product;
+
         holder.tvProductName.setText(product != null ? product.getProductName() : "Sản phẩm");
         holder.tvProductPrice.setText(String.format("%,.0f đ", item.price));
         holder.tvQuantity.setText(String.valueOf(item.quantity));
@@ -83,10 +97,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             holder.imgProduct.setImageResource(R.drawable.logo);
         }
 
-        // --- Checkbox chọn ---
+        // Checkbox chọn/xóa
         holder.cbItemSelect.setOnCheckedChangeListener(null);
         holder.cbItemSelect.setChecked(item.isSelected);
-
         holder.cbItemSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             item.isSelected = isChecked;
             if (onItemCheckedChangeListener != null) {
@@ -94,7 +107,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             }
         });
 
-        // Để nút luôn enable (trừ khi muốn lock khi = 0)
+        // Nút trừ: disable khi <= 0
         holder.btnMinus.setEnabled(item.quantity > 0);
 
         holder.btnMinus.setOnClickListener(v -> {
@@ -106,11 +119,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             }
         });
 
-
-
         holder.btnPlus.setOnClickListener(v -> {
             updateQuantityApi(item.cartItemID, item.quantity + 1, item, holder);
         });
+
+        // ------ Cập nhật UI theo edit mode -------
+        if (isEditMode) {
+            // Show checkbox, hoặc các UI chỉnh sửa/xóa
+            holder.cbItemSelect.setVisibility(View.VISIBLE);
+            // Có thể thêm các UI khác nếu cần
+        } else {
+            holder.cbItemSelect.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -118,6 +138,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return items != null ? items.size() : 0;
     }
 
+    // Gọi API cập nhật số lượng
     private void updateQuantityApi(int cartItemId, int newQuantity, CartItem item, CartViewHolder holder) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://be-allora.onrender.com/")
@@ -142,9 +163,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                 if (response.errorBody() != null) {
                                     errMsg = response.errorBody().string();
                                 }
-                            } catch (Exception e) { }
+                            } catch (Exception e) {}
                             android.util.Log.e("API_UPDATE_QTY", "Update fail code: " + response.code() + " | " + errMsg);
-                            android.util.Log.d("API_UPDATE_QTY", "cartItemId = " + cartItemId + ", newQuantity = " + newQuantity);
                             Toast.makeText(context, "Lỗi cập nhật: " + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -157,7 +177,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 });
     }
 
-    // ====== THÊM HÀM XOÁ VÀ XÁC NHẬN ======
+    // Hiện dialog xác nhận xóa
     private void showConfirmRemoveDialog(CartItem item, int position) {
         new androidx.appcompat.app.AlertDialog.Builder(context)
                 .setMessage("Bạn chắc chắn muốn bỏ sản phẩm này?")
@@ -168,6 +188,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .show();
     }
 
+    // Xóa sản phẩm khỏi giỏ (API)
     private void removeCartItemApi(CartItem item, int position) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://be-allora.onrender.com/")
