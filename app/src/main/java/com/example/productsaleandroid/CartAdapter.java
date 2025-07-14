@@ -123,14 +123,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             updateQuantityApi(item.cartItemID, item.quantity + 1, item, holder);
         });
 
-        // ------ Cập nhật UI theo edit mode -------
-        if (isEditMode) {
-            // Show checkbox, hoặc các UI chỉnh sửa/xóa
-            holder.cbItemSelect.setVisibility(View.VISIBLE);
-            // Có thể thêm các UI khác nếu cần
-        } else {
-            holder.cbItemSelect.setVisibility(View.GONE);
-        }
+        holder.cbItemSelect.setVisibility(View.VISIBLE);
     }
 
     @Override
