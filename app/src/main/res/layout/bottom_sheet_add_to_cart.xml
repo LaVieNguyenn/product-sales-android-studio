@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/imgSheetProduct"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvSheetName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên sản phẩm"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSheetPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₫1.000.000"
+                android:textColor="#D32F2F"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Số lượng -->
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Số lượng"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/btnMinus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_minus"
+            android:background="?android:selectableItemBackground"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/btnPlus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_plus"
+            android:background="?android:selectableItemBackground"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <!-- Nút thêm vào giỏ hàng -->
+    <Button
+        android:id="@+id/btnConfirmAddToCart"
+        android:layout_marginTop="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Thêm vào Giỏ hàng"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:backgroundTint="#F44336"
+        android:textColor="#FFFFFF"/>
+</LinearLayout>

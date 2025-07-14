@@ -57,6 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         // 🔥 Bắt sự kiện click mở ProductDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", product.getProductId());
             intent.putExtra("name", product.getProductName());
             intent.putExtra("technicalSpecification", product.getTechnicalSpecifications());
             intent.putExtra("description", product.getFullDescription()); // dùng mô tả chi tiết hơn

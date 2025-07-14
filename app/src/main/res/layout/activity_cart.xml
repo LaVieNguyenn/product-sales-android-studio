@@ -52,14 +52,14 @@
             android:text="Sửa"
             android:textColor="#FF6600"
             android:textSize="16sp"
-            android:layout_marginEnd="8dp" /> <!-- Thêm dòng này để đẩy "Sửa" qua trái -->
+            android:layout_marginEnd="8dp" />
 
         <FrameLayout
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="2dp"
-            android:layout_marginStart="0dp"> <!-- Có thể tăng nếu muốn cách xa hơn -->
+            android:layout_marginStart="0dp">
 
             <ImageView
                 android:id="@+id/btnChat"
@@ -86,6 +86,7 @@
                 android:includeFontPadding="false"/>
         </FrameLayout>
     </LinearLayout>
+
     <!-- List Cart Items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCart"
@@ -94,7 +95,7 @@
         android:layout_weight="1"
         android:padding="8dp"/>
 
-    <!-- Footer Cart Shopee style -->
+    <!-- Footer mặc định: Mua hàng -->
     <LinearLayout
         android:id="@+id/footerCart"
         android:layout_width="match_parent"
@@ -105,7 +106,8 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp">
+        android:paddingBottom="4dp"
+        android:visibility="visible">
 
         <!-- Chọn tất cả -->
         <CheckBox
@@ -143,4 +145,64 @@
             android:textSize="16sp"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
+
+    <!-- Footer edit mode: Lưu vào đã thích + Xóa -->
+    <LinearLayout
+        android:id="@+id/footerCartEdit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#fff"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/cbSelectAllEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tất cả"
+            android:textSize="16sp"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/tvFooterEditTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="#333"/>
+
+        <TextView
+            android:id="@+id/btnSaveToFav"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_bg_orange"
+            android:text="Lưu vào Đã thích"
+            android:textColor="#FF6600"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/btnDelete"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_bg_orange"
+            android:text="Xóa"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginLeft="8dp"/>
+    </LinearLayout>
+
 </LinearLayout>
