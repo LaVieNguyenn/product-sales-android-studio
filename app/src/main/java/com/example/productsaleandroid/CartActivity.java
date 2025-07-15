@@ -45,6 +45,7 @@ public class CartActivity extends AppCompatActivity {
     private TextView btnSaveToFav, btnDelete;
 
     private boolean isEditMode = false;
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class CartActivity extends AppCompatActivity {
 
         // Lấy token
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String token = prefs.getString("token", "");
+        token = prefs.getString("token", "");
         if (token.isEmpty()) {
             Toast.makeText(this, "Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
             finish();
@@ -150,14 +151,33 @@ public class CartActivity extends AppCompatActivity {
             Toast.makeText(this, "Đã lưu " + count + " sản phẩm vào Đã thích!", Toast.LENGTH_SHORT).show();
         });
 
+        // NÚT XÓA ĐÃ TÍCH HỢP XÓA NHIỀU/XÓA HẾT
         btnDelete.setOnClickListener(v -> {
-            int count = getSelectedCount();
-            if (count == 0) {
+            List<CartItem> selectedItems = cartAdapter.getSelectedItems();
+            if (selectedItems.isEmpty()) {
                 Toast.makeText(this, "Chọn sản phẩm để xóa!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // TODO: API xóa sản phẩm khỏi giỏ hàng ở đây
-            Toast.makeText(this, "Đã xóa " + count + " sản phẩm!", Toast.LENGTH_SHORT).show();
+
+            if (selectedItems.size() == cartAdapter.getItems().size()) {
+                // Xóa toàn bộ
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setMessage("Bạn muốn xóa toàn bộ sản phẩm trong giỏ?")
+                        .setNegativeButton("Không", null)
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            deleteAllCartItems(token);
+                        })
+                        .show();
+            } else {
+                // Xóa từng item đã chọn
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setMessage("Bạn muốn xóa các sản phẩm đã chọn?")
+                        .setNegativeButton("Không", null)
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            deleteSelectedCartItems(token, selectedItems);
+                        })
+                        .show();
+            }
         });
 
         loadCartFromApi(token);
@@ -291,6 +311,66 @@ public class CartActivity extends AppCompatActivity {
                     updateFooter();
                 });
             }
+        }
+    }
+
+    // Xóa toàn bộ sản phẩm trong giỏ (API /api/carts)
+    private void deleteAllCartItems(String token) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://be-allora.onrender.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CartApi cartApi = retrofit.create(CartApi.class);
+        cartApi.clearCart("Bearer " + token).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    cartAdapter.setItems(new ArrayList<>());
+                    Toast.makeText(CartActivity.this, "Đã xóa toàn bộ sản phẩm!", Toast.LENGTH_SHORT).show();
+                    updateFooter();
+                    updateCartTitle();
+                } else {
+                    Toast.makeText(CartActivity.this, "Không thể xóa giỏ hàng!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(CartActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Xóa từng sản phẩm đã chọn (API /api/carts/items/{id})
+    private void deleteSelectedCartItems(String token, List<CartItem> selectedItems) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://be-allora.onrender.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CartApi cartApi = retrofit.create(CartApi.class);
+
+        // Xóa từng item (gọi API nhiều lần)
+        int[] counter = {0}; // Biến đếm cho callback cuối cùng
+        for (CartItem item : selectedItems) {
+            cartApi.deleteCartItem("Bearer " + token, item.cartItemID).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    counter[0]++;
+                    if (counter[0] == selectedItems.size()) {
+                        loadCartFromApi(token); // Reload lại giỏ hàng sau khi xóa hết
+                        Toast.makeText(CartActivity.this, "Đã xóa sản phẩm đã chọn!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    counter[0]++;
+                    if (counter[0] == selectedItems.size()) {
+                        loadCartFromApi(token);
+                        Toast.makeText(CartActivity.this, "Đã xóa sản phẩm đã chọn!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }

@@ -52,8 +52,11 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        bottomNav.findViewById(R.id.nav_profile).setOnClickListener(v ->
-                Toast.makeText(this, "Tài khoản", Toast.LENGTH_SHORT).show());
+        bottomNav.findViewById(R.id.nav_profile).setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
 
         // RecyclerView
         recyclerView = findViewById(R.id.recyclerProducts);

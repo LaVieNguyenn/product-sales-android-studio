@@ -29,7 +29,8 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ProductDetailActivity"/>
         <activity android:name=".CartActivity"/>
-
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".EditProfileActivity"/>
     </application>
 
 </manifest>
