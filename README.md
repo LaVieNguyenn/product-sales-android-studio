@@ -1,6 +1,3 @@
-Dưới đây là **file README.md** mẫu chuyên nghiệp, rõ ràng, dành cho dự án Android Product Sale App kết nối API:
-
----
 
 ```markdown
 # Product Sale Android App
