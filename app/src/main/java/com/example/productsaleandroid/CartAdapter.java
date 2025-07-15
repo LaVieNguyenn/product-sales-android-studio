@@ -1,4 +1,3 @@
-
 package com.example.productsaleandroid;
 
 import android.content.Context;
@@ -19,6 +18,7 @@ import com.example.productsaleandroid.api.UpdateQuantityRequest;
 import com.example.productsaleandroid.models.CartItem;
 import com.example.productsaleandroid.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -52,6 +52,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public List<CartItem> getItems() {
         return items;
+    }
+
+    // TRẢ VỀ DANH SÁCH SẢN PHẨM ĐÃ CHỌN
+    public List<CartItem> getSelectedItems() {
+        List<CartItem> selected = new ArrayList<>();
+        if (items != null) {
+            for (CartItem item : items) {
+                if (item.isSelected) selected.add(item);
+            }
+        }
+        return selected;
     }
 
     // Hàm chuyển trạng thái edit mode
@@ -97,9 +108,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             holder.imgProduct.setImageResource(R.drawable.logo);
         }
 
-        // Checkbox chọn/xóa
+        // Checkbox chọn/xóa (luôn hiện)
         holder.cbItemSelect.setOnCheckedChangeListener(null);
         holder.cbItemSelect.setChecked(item.isSelected);
+        holder.cbItemSelect.setVisibility(View.VISIBLE);
         holder.cbItemSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             item.isSelected = isChecked;
             if (onItemCheckedChangeListener != null) {
@@ -122,8 +134,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.btnPlus.setOnClickListener(v -> {
             updateQuantityApi(item.cartItemID, item.quantity + 1, item, holder);
         });
-
-        holder.cbItemSelect.setVisibility(View.VISIBLE);
     }
 
     @Override

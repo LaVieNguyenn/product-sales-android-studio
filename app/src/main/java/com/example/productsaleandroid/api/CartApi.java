@@ -31,4 +31,6 @@ public interface CartApi {
             @Header("Authorization") String token,
             @Body AddToCartRequest request
     );
+    @DELETE("/api/carts")
+    Call<Void> clearCart(@Header("Authorization") String token);
 }
