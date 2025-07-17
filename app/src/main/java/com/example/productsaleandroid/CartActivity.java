@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import androidx.annotation.NonNull;
 
 public class CartActivity extends AppCompatActivity {
     private RecyclerView recyclerViewCart;
@@ -47,10 +53,23 @@ public class CartActivity extends AppCompatActivity {
     private boolean isEditMode = false;
     private String token = "";
 
+    // Request code xin quyền notification
+    private static final int NOTIF_PERMISSION_REQUEST = 1011;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        // Xin quyền notification cho Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        NOTIF_PERMISSION_REQUEST);
+            }
+        }
 
         // Header
         btnBack = findViewById(R.id.btnBack);
@@ -64,7 +83,7 @@ public class CartActivity extends AppCompatActivity {
         footerCart = findViewById(R.id.footerCart);
         cbSelectAll = findViewById(R.id.cbSelectAll);
         tvFooterTotal = findViewById(R.id.tvFooterTotal);
-        tvFooterBuy = findViewById(R.id.tvFooterBuy);
+        tvFooterBuy = findViewById(R.id.tvFooterBuy); // Nút "Mua hàng"
 
         // Footer edit mode
         footerCartEdit = findViewById(R.id.footerCartEdit);
@@ -80,7 +99,6 @@ public class CartActivity extends AppCompatActivity {
             tvEdit.setText(isEditMode ? "Xong" : "Sửa");
             footerCart.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
             footerCartEdit.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-            // Nếu adapter có cờ editMode thì update luôn
             if (cartAdapter != null) {
                 cartAdapter.setEditMode(isEditMode);
             }
@@ -131,14 +149,28 @@ public class CartActivity extends AppCompatActivity {
             updateFooter();
         });
 
+        // NÚT "Mua hàng" → Mở PaymentActivity và truyền data
         tvFooterBuy.setOnClickListener(v -> {
-            int count = getSelectedCount();
-            if (count == 0) {
+            List<CartItem> selectedItems = cartAdapter.getSelectedItems();
+            if (selectedItems == null || selectedItems.isEmpty()) {
                 Toast.makeText(this, "Hãy chọn sản phẩm để mua!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // Xử lý đặt hàng ở đây (danh sách sản phẩm đã chọn)
-            Toast.makeText(this, "Bạn đã chọn " + count + " sản phẩm.", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, PaymentActivity.class);
+
+            // Nếu chỉ 1 sản phẩm thì truyền 1 item, còn nhiều thì truyền list (tuỳ ý bạn)
+            if (selectedItems.size() == 1) {
+                intent.putExtra("cartItem", selectedItems.get(0)); // CartItem implements Serializable
+            } else {
+                intent.putExtra("selectedItems", new ArrayList<>(selectedItems)); // ArrayList implements Serializable
+            }
+
+            double total = 0;
+            for (CartItem item : selectedItems) total += item.price * item.quantity;
+            intent.putExtra("totalAmount", total);
+
+            startActivity(intent);
         });
 
         btnSaveToFav.setOnClickListener(v -> {
@@ -147,11 +179,9 @@ public class CartActivity extends AppCompatActivity {
                 Toast.makeText(this, "Chọn sản phẩm để lưu!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // TODO: API lưu vào đã thích ở đây
             Toast.makeText(this, "Đã lưu " + count + " sản phẩm vào Đã thích!", Toast.LENGTH_SHORT).show();
         });
 
-        // NÚT XÓA ĐÃ TÍCH HỢP XÓA NHIỀU/XÓA HẾT
         btnDelete.setOnClickListener(v -> {
             List<CartItem> selectedItems = cartAdapter.getSelectedItems();
             if (selectedItems.isEmpty()) {
@@ -160,7 +190,6 @@ public class CartActivity extends AppCompatActivity {
             }
 
             if (selectedItems.size() == cartAdapter.getItems().size()) {
-                // Xóa toàn bộ
                 new androidx.appcompat.app.AlertDialog.Builder(this)
                         .setMessage("Bạn muốn xóa toàn bộ sản phẩm trong giỏ?")
                         .setNegativeButton("Không", null)
@@ -169,7 +198,6 @@ public class CartActivity extends AppCompatActivity {
                         })
                         .show();
             } else {
-                // Xóa từng item đã chọn
                 new androidx.appcompat.app.AlertDialog.Builder(this)
                         .setMessage("Bạn muốn xóa các sản phẩm đã chọn?")
                         .setNegativeButton("Không", null)
@@ -181,6 +209,18 @@ public class CartActivity extends AppCompatActivity {
         });
 
         loadCartFromApi(token);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == NOTIF_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (cartAdapter != null && cartAdapter.getItems() != null && !cartAdapter.getItems().isEmpty()) {
+                    NotificationUtils.showCartBadgeNotification(this, cartAdapter.getItems().size());
+                }
+            }
+        }
     }
 
     private void updateCartTitle() {
@@ -211,6 +251,12 @@ public class CartActivity extends AppCompatActivity {
                     }
                     cartAdapter.setItems(cart.items);
                     updateFooter();
+                    int cartCount = cart.items != null ? cart.items.size() : 0;
+                    if (cartCount > 0) {
+                        NotificationUtils.showCartBadgeNotification(CartActivity.this, cartCount);
+                    } else {
+                        NotificationUtils.cancelCartBadge(CartActivity.this);
+                    }
                 } else {
                     Toast.makeText(CartActivity.this, "Không thể lấy giỏ hàng!", Toast.LENGTH_SHORT).show();
                 }
@@ -222,7 +268,6 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    // Đếm số sản phẩm đã chọn
     private int getSelectedCount() {
         int count = 0;
         List<CartItem> items = cartAdapter.getItems();
@@ -232,7 +277,6 @@ public class CartActivity extends AppCompatActivity {
         return count;
     }
 
-    // Tổng tiền đã chọn
     private double getSelectedTotal() {
         double total = 0;
         List<CartItem> items = cartAdapter.getItems();
@@ -242,7 +286,6 @@ public class CartActivity extends AppCompatActivity {
         return total;
     }
 
-    // Cập nhật footer phù hợp mode
     private void updateFooter() {
         int selectedCount = getSelectedCount();
         double selectedTotal = getSelectedTotal();
@@ -250,7 +293,6 @@ public class CartActivity extends AppCompatActivity {
         if (!isEditMode) {
             tvFooterTotal.setText("Tổng cộng đ" + String.format("%,.0f", selectedTotal));
             tvFooterBuy.setText("Mua hàng (" + selectedCount + ")");
-            // Update "chọn tất cả" ở footer mặc định
             List<CartItem> items = cartAdapter.getItems();
             boolean allChecked = true;
             if (items != null && !items.isEmpty()) {
@@ -281,7 +323,6 @@ public class CartActivity extends AppCompatActivity {
                 });
             }
         } else {
-            // Update "chọn tất cả" ở footer edit
             List<CartItem> items = cartAdapter.getItems();
             boolean allChecked = true;
             if (items != null && !items.isEmpty()) {
@@ -314,7 +355,6 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
-    // Xóa toàn bộ sản phẩm trong giỏ (API /api/carts)
     private void deleteAllCartItems(String token) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://be-allora.onrender.com/")
@@ -330,6 +370,7 @@ public class CartActivity extends AppCompatActivity {
                     Toast.makeText(CartActivity.this, "Đã xóa toàn bộ sản phẩm!", Toast.LENGTH_SHORT).show();
                     updateFooter();
                     updateCartTitle();
+                    NotificationUtils.cancelCartBadge(CartActivity.this);
                 } else {
                     Toast.makeText(CartActivity.this, "Không thể xóa giỏ hàng!", Toast.LENGTH_SHORT).show();
                 }
@@ -341,7 +382,6 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    // Xóa từng sản phẩm đã chọn (API /api/carts/items/{id})
     private void deleteSelectedCartItems(String token, List<CartItem> selectedItems) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://be-allora.onrender.com/")
@@ -350,15 +390,14 @@ public class CartActivity extends AppCompatActivity {
 
         CartApi cartApi = retrofit.create(CartApi.class);
 
-        // Xóa từng item (gọi API nhiều lần)
-        int[] counter = {0}; // Biến đếm cho callback cuối cùng
+        int[] counter = {0};
         for (CartItem item : selectedItems) {
             cartApi.deleteCartItem("Bearer " + token, item.cartItemID).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     counter[0]++;
                     if (counter[0] == selectedItems.size()) {
-                        loadCartFromApi(token); // Reload lại giỏ hàng sau khi xóa hết
+                        loadCartFromApi(token);
                         Toast.makeText(CartActivity.this, "Đã xóa sản phẩm đã chọn!", Toast.LENGTH_SHORT).show();
                     }
                 }
