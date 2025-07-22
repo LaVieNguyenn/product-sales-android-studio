@@ -4,6 +4,7 @@ public class WishlistItem {
     private int wishlistId;
     private int productId;
     private Product product;
+    private boolean isSelected = false;
 
     public Product getProduct() {
         return product;
@@ -20,4 +21,6 @@ public class WishlistItem {
     public void setProductId(int productId) {
         this.productId = productId;
     }
+    public boolean isSelected() { return isSelected; }
+    public void setSelected(boolean selected) { isSelected = selected; }
 }

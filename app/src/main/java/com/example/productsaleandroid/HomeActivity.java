@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +38,10 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
 
+    private ImageView imgSpinWheel, btnCloseSpin;
+    private FrameLayout spinContainer;
+    private RotateAnimation rotate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,25 +69,40 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
         // RecyclerView
         recyclerView = findViewById(R.id.recyclerProducts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter(this, null);
         recyclerView.setAdapter(adapter);
 
-        // load badge giỏ hàng lần đầu
+        // Load cart badge + product list
         loadCartBadgeFromApi();
-
-        // Gọi API để lấy danh sách sản phẩm
         loadProducts();
+
+        // 👉 Setup Spin Wheel
+        imgSpinWheel = findViewById(R.id.imgSpinWheel);
+        btnCloseSpin = findViewById(R.id.btnCloseSpin);
+        spinContainer = findViewById(R.id.spinWheelContainer);
+
+        startRotateAnimation(); // bắt đầu xoay
+
+        imgSpinWheel.setOnClickListener(v -> {
+            // Mở trang quay thưởng
+            Intent intent = new Intent(HomeActivity.this, SpinWheelActivity.class);
+            startActivity(intent);
+        });
+
+        btnCloseSpin.setOnClickListener(v -> {
+            // Dừng và ẩn
+            imgSpinWheel.clearAnimation();
+            spinContainer.setVisibility(View.GONE);
+        });
     }
 
-    // GỌI LẠI KHI MÀN HÌNH HOME ĐƯỢC HIỆN LÊN
     @Override
     protected void onResume() {
         super.onResume();
-        loadCartBadgeFromApi(); // <-- BẮT BUỘC để cập nhật badge mỗi lần quay lại Home
+        loadCartBadgeFromApi(); // cập nhật cart badge
     }
 
     private void loadCartBadgeFromApi() {
@@ -100,6 +124,7 @@ public class HomeActivity extends AppCompatActivity {
                     updateCartBadge(0);
                 }
             }
+
             @Override
             public void onFailure(Call<Cart> call, Throwable t) {
                 updateCartBadge(0);
@@ -136,5 +161,17 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void startRotateAnimation() {
+        rotate = new RotateAnimation(
+                0f, 360f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(4000); // tốc độ quay 1 vòng
+        rotate.setRepeatCount(Animation.INFINITE); // lặp mãi mãi
+        rotate.setInterpolator(new LinearInterpolator());
+
+        imgSpinWheel.startAnimation(rotate);
     }
 }

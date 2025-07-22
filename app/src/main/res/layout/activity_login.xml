@@ -57,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:hint="Email/Phone/UserName "
+                android:hint="Email"
                 android:inputType="textEmailAddress|text"
                 android:background="@android:color/transparent"
                 android:paddingStart="0dp"
@@ -178,18 +178,6 @@
         android:text="Continue with Google"
         android:textColor="#212121"
         android:backgroundTint="#fff"
-        android:stateListAnimator="@null"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnFacebookLogin"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="Continue with Facebook"
-        android:textColor="#fff"
-        android:drawableLeft="@drawable/ico_facebook"
-        android:drawableTintMode="screen"
-        android:backgroundTint="#1977F3"
         android:stateListAnimator="@null"
         android:layout_marginBottom="8dp" />
 

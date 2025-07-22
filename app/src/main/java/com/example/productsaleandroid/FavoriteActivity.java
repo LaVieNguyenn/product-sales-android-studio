@@ -1,28 +1,24 @@
 package com.example.productsaleandroid;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.productsaleandroid.api.ApiClient;
 import com.example.productsaleandroid.api.CartApi;
 import com.example.productsaleandroid.api.WishlistApi;
 import com.example.productsaleandroid.models.Cart;
 import com.example.productsaleandroid.models.WishlistItem;
 import com.example.productsaleandroid.models.WishlistListResponse;
-import com.example.productsaleandroid.models.WishlistResponse;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,38 +33,95 @@ public class FavoriteActivity extends AppCompatActivity {
     private TextView tvCartBadge;
     private FrameLayout btnCart;
 
+    private boolean isEditMode = false;
+    private TextView btnEdit;
+    private LinearLayout selectionBar;
+    private Button btnRemoveSelected;
+    private CheckBox checkboxAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        // Khởi tạo RecyclerView
         recyclerView = findViewById(R.id.recyclerViewFavorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new WishlistAdapter(wishlist, this);
         recyclerView.setAdapter(adapter);
 
-        // Khởi tạo API
         wishlistApi = ApiClient.getClient().create(WishlistApi.class);
 
         // Back về Home
         findViewById(R.id.btnBack).setOnClickListener(v -> {
-            Intent intent = new Intent(FavoriteActivity.this, HomeActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, HomeActivity.class));
             finish();
         });
 
-        // Badge cart
+        // Giỏ hàng
         tvCartBadge = findViewById(R.id.tvCartBadge);
         btnCart = findViewById(R.id.btnCart);
         btnCart.setOnClickListener(v -> {
-            Intent intent = new Intent(FavoriteActivity.this, CartActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, CartActivity.class));
         });
 
-        // Gọi API
+        // Chỉnh sửa
+        btnEdit = findViewById(R.id.btnEdit);
+        selectionBar = findViewById(R.id.selectionBar);
+        btnRemoveSelected = findViewById(R.id.btnRemoveSelected);
+        checkboxAll = findViewById(R.id.checkboxAll);
+
+        btnEdit.setOnClickListener(v -> {
+            isEditMode = !isEditMode;
+            adapter.setEditMode(isEditMode);
+            btnEdit.setText(isEditMode ? "Hoàn tất" : "Chỉnh sửa");
+            selectionBar.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+            adapter.clearSelections();
+        });
+
+        btnRemoveSelected.setOnClickListener(v -> {
+            Set<Integer> selected = adapter.getSelectedProductIds();
+            if (selected.isEmpty()) {
+                Toast.makeText(this, "Chưa chọn sản phẩm nào", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Xác nhận")
+                    .setMessage("Bạn có chắc chắn muốn bỏ thích " + selected.size() + " sản phẩm?")
+                    .setPositiveButton("Đồng ý", (dialog, which) -> {
+                        String token = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("token", "");
+                        for (Integer id : selected) {
+                            wishlistApi.removeFromWishlist("Bearer " + token, id).enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    loadWishlist();
+                                }
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    Toast.makeText(FavoriteActivity.this, "Lỗi khi xoá!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
+
+        checkboxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            adapter.selectAll(isChecked);
+            updateSelectedCount();
+        });
+
+        adapter.setOnSelectionChangedListener(() -> updateSelectedCount());
+
         loadWishlist();
         loadCartBadgeFromApi();
+    }
+
+    private void updateSelectedCount() {
+        int selected = adapter.getSelectedProductIds().size();
+        int total = wishlist != null ? wishlist.size() : 0;
+        checkboxAll.setText("Đã chọn " + selected + "/" + total);
     }
 
     @Override
@@ -79,23 +132,16 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private void loadWishlist() {
         String token = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("token", "");
-        Log.d("FAV_DEBUG", "Token: " + token);
-
-        if (token == null || token.trim().isEmpty()) {
-            Toast.makeText(this, "Token rỗng! Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
-            Log.e("FAV_DEBUG", "Không có token để gọi API.");
-            return;
-        }
 
         wishlistApi.getWishlist("Bearer " + token).enqueue(new Callback<WishlistListResponse>() {
             @Override
             public void onResponse(Call<WishlistListResponse> call, Response<WishlistListResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     wishlist.clear();
-                    wishlist.addAll(response.body().getData()); // ✅ addAll danh sách wishlist
+                    wishlist.addAll(response.body().getData());
+                    adapter.clearSelections(); // 🛠️ Thêm dòng này để reset lại selectedIds
                     adapter.notifyDataSetChanged();
-                } else {
-                    Log.e("FAV_DEBUG", "Response lỗi hoặc body null. Code: " + response.code());
+                    updateSelectedCount();
                 }
             }
 
@@ -107,10 +153,9 @@ public class FavoriteActivity extends AppCompatActivity {
     }
 
 
-    private void loadCartBadgeFromApi() {
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String token = prefs.getString("token", "");
 
+    private void loadCartBadgeFromApi() {
+        String token = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("token", "");
         CartApi cartApi = ApiClient.getClient().create(CartApi.class);
         cartApi.getCurrentCart("Bearer " + token).enqueue(new Callback<Cart>() {
             @Override

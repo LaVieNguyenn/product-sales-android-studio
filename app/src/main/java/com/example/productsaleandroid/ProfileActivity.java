@@ -3,16 +3,14 @@ package com.example.productsaleandroid;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.*;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.productsaleandroid.api.ApiClient;
 import com.example.productsaleandroid.api.CartApi;
 import com.example.productsaleandroid.api.UserApi;
+import com.example.productsaleandroid.api.AuthService;
 import com.example.productsaleandroid.models.Cart;
 import com.example.productsaleandroid.models.User;
 
@@ -25,7 +23,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView btnSettings;
     private TextView tvUserName;
 
-    // Không khai báo trực tiếp cartBadge, mà lấy từ include!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
             startActivity(intent);
         });
-
 
         // Lấy token để gọi API user & cart
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -66,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        // **Lấy badge từ layout include**
+        // Lấy badge từ layout include
         View bottomNav = findViewById(R.id.includeBottomNav);
         TextView cartBadge = bottomNav.findViewById(R.id.tvCartBadge);
 
@@ -79,7 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
         });
         bottomNav.findViewById(R.id.nav_favorite).setOnClickListener(v -> {
-            Toast.makeText(this, "Tính năng đang phát triển", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, FavoriteActivity.class));
+            finish();
         });
         bottomNav.findViewById(R.id.nav_cart).setOnClickListener(v -> {
             startActivity(new Intent(this, CartActivity.class));
@@ -88,9 +85,42 @@ public class ProfileActivity extends AppCompatActivity {
         bottomNav.findViewById(R.id.nav_profile).setOnClickListener(v -> {
             // Đang ở Profile, không cần gì thêm
         });
+
+        // ==== ĐĂNG XUẤT ====
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            new android.app.AlertDialog.Builder(ProfileActivity.this)
+                    .setMessage("Bạn có muốn đăng xuất không?")
+                    .setNegativeButton("Không", null)
+                    .setPositiveButton("Đồng ý", (dialog, which) -> {
+                        // Gọi API logout
+                        AuthService apiService = ApiClient.getClient().create(AuthService.class);
+                        apiService.logout("Bearer " + token).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                prefs.edit().clear().apply();
+                                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(ProfileActivity.this, "Lỗi mạng khi đăng xuất!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .show();
+        });
+
+        // ==== SỰ KIỆN CHUYỂN TRANG XEM LỊCH SỬ MUA HÀNG ====
+        RelativeLayout layoutOrderHeader = findViewById(R.id.layoutOrderHeader);
+        layoutOrderHeader.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, OrderHistoryActivity.class);
+            startActivity(intent);
+        });
     }
 
-    // Nhận cartBadge làm đối số
     private void loadCartCount(String token, TextView cartBadge) {
         CartApi cartApi = ApiClient.getClient().create(CartApi.class);
         cartApi.getCurrentCart("Bearer " + token).enqueue(new Callback<Cart>() {

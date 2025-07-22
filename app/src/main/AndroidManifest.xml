@@ -37,6 +37,9 @@
         <activity android:name=".PaypalWebViewActivity"/>
         <activity android:name=".OrderConfirmationActivity"/>
         <activity android:name=".FavoriteActivity"/>
+        <activity android:name=".SpinWheelActivity"/>
+        <activity android:name=".OrderDetailActivity"/>
+        <activity android:name=".OrderHistoryActivity"/>
 
 
     </application>
