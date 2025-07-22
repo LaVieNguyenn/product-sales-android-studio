@@ -22,16 +22,14 @@
         android:layout_above="@id/includeBottomNav">
 
         <!-- Khu vực tìm kiếm -->
-        <include
-            layout="@layout/main_content_section" />
+        <include layout="@layout/main_content_section" />
         <include layout="@layout/product_header" />
+
         <!-- RecyclerView hiển thị danh sách sản phẩm -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProducts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/includeHeader"
-            android:layout_above="@id/includeBottomNav"
             android:clipToPadding="false"
             android:paddingBottom="80dp" />
     </LinearLayout>
@@ -44,4 +42,40 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="8dp" />
+
+    <!-- 🔔 Nút vòng quay ở góc -->
+    <FrameLayout
+        android:id="@+id/spinWheelContainer"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="90dp"> <!-- Tránh đè vào BottomNav -->
+
+        <!-- Vòng quay -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgSpinWheel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/spin_thumbnail"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle" />
+
+        <!-- Nút X màu xanh lá -->
+        <ImageView
+            android:id="@+id/btnCloseSpin"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="-8dp"
+            android:src="@drawable/ic_close"
+            android:background="@drawable/bg_green_circle"
+            android:padding="4dp" />
+    </FrameLayout>
+
+
+
+
+
 </RelativeLayout>

@@ -7,6 +7,7 @@
     card_view:cardCornerRadius="8dp"
     card_view:cardElevation="4dp"
     android:foreground="?attr/selectableItemBackground">
+
     <LinearLayout
         android:orientation="horizontal"
         android:padding="10dp"
@@ -14,14 +15,24 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
 
+        <!-- ✅ CheckBox chọn sản phẩm khi chỉnh sửa -->
+        <CheckBox
+            android:id="@+id/checkboxSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Ảnh sản phẩm -->
         <ImageView
             android:id="@+id/imgProduct"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/logo"
-            android:contentDescription="Product image"/>
+            android:contentDescription="Product image"
+            android:background="@drawable/logo" />
 
+        <!-- Thông tin sản phẩm -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,7 +48,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:maxLines="2"
-                android:ellipsize="end"/>
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/tvDesc"
@@ -47,7 +58,7 @@
                 android:textSize="14sp"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:textColor="#555"/>
+                android:textColor="#555" />
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -57,15 +68,16 @@
                 android:textSize="14sp"
                 android:textColor="#FF3D00"
                 android:textStyle="bold"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp" />
         </LinearLayout>
 
+        <!-- Nút xoá khỏi yêu thích -->
         <ImageButton
             android:id="@+id/btnHeart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite"
             android:background="@null"
-            android:contentDescription="Xóa khỏi yêu thích"/>
+            android:contentDescription="Xóa khỏi yêu thích" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

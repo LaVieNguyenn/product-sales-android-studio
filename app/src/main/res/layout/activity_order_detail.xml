@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#F6F6F6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvOrderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chi tiết đơn hàng"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:padding="16dp"/>
+    <TextView
+        android:id="@+id/tvOrderStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hoàn thành"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#F4511E"
+        android:gravity="center"
+        android:padding="4dp"/>
+    <TextView
+        android:id="@+id/tvOrderInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Phương thức: Paypal | Địa chỉ: Thành phố Hồ Chí Minh"
+        android:textColor="#333"
+        android:textSize="14sp"
+        android:padding="8dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerOrderProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"/>
+    <TextView
+        android:id="@+id/tvTotalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tổng cộng: ₫300.000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#F4511E"
+        android:gravity="end"
+        android:padding="16dp"/>
+</LinearLayout>

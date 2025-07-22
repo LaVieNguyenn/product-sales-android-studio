@@ -9,6 +9,35 @@
     <!-- Toolbar -->
     <include layout="@layout/include_toolbar_favorite" />
 
+    <!-- Thanh hiện khi chỉnh sửa: số lượng đã chọn + nút Bỏ thích -->
+    <LinearLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/checkboxAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đã chọn 0/0"
+            android:layout_marginEnd="16dp"/>
+
+        <Button
+            android:id="@+id/btnRemoveSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bỏ thích"
+            android:textColor="@android:color/holo_red_dark"
+            android:backgroundTint="@android:color/white"
+            android:background="@drawable/button_border_red"
+            android:paddingHorizontal="16dp"/>
+    </LinearLayout>
+
     <!-- Danh sách sản phẩm yêu thích -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavorites"
