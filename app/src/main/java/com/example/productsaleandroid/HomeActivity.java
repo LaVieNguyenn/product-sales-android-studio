@@ -44,8 +44,11 @@ public class HomeActivity extends AppCompatActivity {
         bottomNav.findViewById(R.id.nav_home).setOnClickListener(v ->
                 Toast.makeText(this, "Đang ở trang chủ", Toast.LENGTH_SHORT).show());
 
-        bottomNav.findViewById(R.id.nav_search).setOnClickListener(v ->
-                Toast.makeText(this, "Tìm kiếm", Toast.LENGTH_SHORT).show());
+        bottomNav.findViewById(R.id.nav_favorite).setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, FavoriteActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        });
 
         bottomNav.findViewById(R.id.nav_cart).setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);

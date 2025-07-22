@@ -2,19 +2,30 @@ package com.example.productsaleandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.productsaleandroid.api.ApiClient;
+import com.example.productsaleandroid.api.WishlistApi;
 import com.example.productsaleandroid.models.Product;
+import com.example.productsaleandroid.models.WishlistRequest;
+import com.example.productsaleandroid.models.WishlistResponse;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
@@ -54,13 +65,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .error(R.drawable.logo)
                 .into(holder.imgProduct);
 
-        // 🔥 Bắt sự kiện click mở ProductDetailActivity
+        holder.ivFavorite.setOnClickListener(v -> {
+            addToWishlist(product.getProductId());
+        });
+
+        // Sự kiện click vào sản phẩm
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.putExtra("productId", product.getProductId());
             intent.putExtra("name", product.getProductName());
             intent.putExtra("technicalSpecification", product.getTechnicalSpecifications());
-            intent.putExtra("description", product.getFullDescription()); // dùng mô tả chi tiết hơn
+            intent.putExtra("description", product.getFullDescription());
             intent.putExtra("price", product.getPrice());
             intent.putExtra("image", product.getImageURL());
             context.startActivity(intent);
@@ -70,6 +85,35 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public int getItemCount() {
         return productList != null ? productList.size() : 0;
+    }
+
+    private void addToWishlist(int productId) {
+        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        if (token.isEmpty()) {
+            Toast.makeText(context, "Vui lòng đăng nhập để thêm vào yêu thích.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        WishlistApi wishlistApi = ApiClient.getClient().create(WishlistApi.class);
+        WishlistRequest request = new WishlistRequest(productId);
+        wishlistApi.addToWishlist("Bearer " + token, request).enqueue(new Callback<WishlistResponse>() {
+            @Override
+            public void onResponse(Call<WishlistResponse> call, Response<WishlistResponse> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WishlistResponse> call, Throwable t) {
+                Toast.makeText(context, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("WISHLIST", "Lỗi: " + t.getMessage());
+            }
+        });
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

@@ -36,6 +36,8 @@
         <activity android:name=".PaymentActivity" />
         <activity android:name=".PaypalWebViewActivity"/>
         <activity android:name=".OrderConfirmationActivity"/>
+        <activity android:name=".FavoriteActivity"/>
+
 
     </application>
 

@@ -78,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
         });
-        bottomNav.findViewById(R.id.nav_search).setOnClickListener(v -> {
+        bottomNav.findViewById(R.id.nav_favorite).setOnClickListener(v -> {
             Toast.makeText(this, "Tính năng đang phát triển", Toast.LENGTH_SHORT).show();
         });
         bottomNav.findViewById(R.id.nav_cart).setOnClickListener(v -> {

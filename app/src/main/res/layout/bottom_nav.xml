@@ -34,9 +34,9 @@
             android:gravity="center"/>
     </LinearLayout>
 
-    <!-- Search Tab -->
+    <!-- Favorite Tab -->
     <LinearLayout
-        android:id="@+id/nav_search"
+        android:id="@+id/nav_favorite"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -46,15 +46,15 @@
         android:clickable="true"
         android:focusable="true">
         <ImageView
-            android:id="@+id/img_search"
+            android:id="@+id/img_favorite"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/ic_favorite"
             android:contentDescription="Tìm kiếm" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tìm kiếm"
+            android:text="Yêu thích"
             android:textSize="12sp"
             android:textColor="#333333"
             android:gravity="center"/>

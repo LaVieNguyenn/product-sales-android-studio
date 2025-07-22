@@ -29,10 +29,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProducts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingBottom="80dp"
-            />
+            android:layout_height="match_parent"
+            android:layout_below="@id/includeHeader"
+            android:layout_above="@id/includeBottomNav"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp" />
     </LinearLayout>
 
     <!-- Bottom Navigation -->
