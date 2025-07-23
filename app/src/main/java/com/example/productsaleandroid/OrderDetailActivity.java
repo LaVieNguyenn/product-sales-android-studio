@@ -2,6 +2,7 @@ package com.example.productsaleandroid;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvOrderInfo = findViewById(R.id.tvOrderInfo);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         recyclerOrderProducts = findViewById(R.id.recyclerOrderProducts);
-
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
         int orderId = getIntent().getIntExtra("orderId", -1);
         if (orderId == -1) {
             Toast.makeText(this, "Không có mã đơn!", Toast.LENGTH_SHORT).show();
@@ -53,7 +55,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                             tvOrderStatus.setText("paid".equals(order.orderStatus) ? "Hoàn thành" : "Đang xử lý");
                             tvOrderInfo.setText("Phương thức: " + order.paymentMethod
                                     + " | Địa chỉ: " + order.billingAddress);
-                            tvTotalPrice.setText("Tổng cộng: ₫" + String.format("%,d", order.cart.totalPrice));
+                            tvTotalPrice.setText("Tổng cộng: ₫" + String.format("%,.0f", order.cart.totalPrice));
                             List<CartItem> items = order.cart.items;
 
                             recyclerOrderProducts.setLayoutManager(new LinearLayoutManager(OrderDetailActivity.this));
