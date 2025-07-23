@@ -3,18 +3,39 @@
     android:orientation="vertical"
     android:background="#F6F6F6"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <!-- Header: Back + Title -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đơn đã mua"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:gravity="center"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
         android:background="#FFF"
-        android:padding="16dp"/>
+        android:gravity="center_vertical">
+
+        <!-- Nút back: icon lớn hơn, vùng bấm rộng hơn -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_back"
+        android:contentDescription="Quay lại" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Đơn đã mua"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#393846"
+            android:background="#FFF"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerOrders"
