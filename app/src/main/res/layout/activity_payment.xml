@@ -69,6 +69,43 @@
             android:background="@drawable/bg_rounded_light"
             android:nestedScrollingEnabled="false"/>
 
+        <!-- VOUCHER -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:src="@drawable/ic_voucher"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tvVoucher"
+                android:text="Chưa áp dụng voucher"
+                android:textSize="15sp"
+                android:textColor="#222"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnApplyVoucher"
+                android:text="Áp dụng"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:textSize="14sp"
+                android:textColor="#fff"
+                android:backgroundTint="#F9A825"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
         <!-- Tổng tiền -->
         <LinearLayout
             android:orientation="horizontal"

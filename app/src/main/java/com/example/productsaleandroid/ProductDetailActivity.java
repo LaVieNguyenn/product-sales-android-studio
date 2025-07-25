@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.productsaleandroid.models.CartItem;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.example.productsaleandroid.api.CartApi;
 import com.example.productsaleandroid.models.AddToCartRequest;
@@ -69,6 +70,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .into(imgProductDetail);
 
         btnBack.setOnClickListener(v -> finish());
+        findViewById(R.id.footerAction).findViewById(R.id.footer_buy_now)
+                .setOnClickListener(v -> showBuyNowSheet());
 
         // Footer: click "Thêm vào Giỏ hàng"
         findViewById(R.id.footerAction).findViewById(R.id.footer_add_to_cart)
@@ -81,6 +84,52 @@ public class ProductDetailActivity extends AppCompatActivity {
             Intent intentCart = new Intent(ProductDetailActivity.this, CartActivity.class);
             startActivity(intentCart);
         });
+    }
+    private void showBuyNowSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_add_to_cart, null);
+        dialog.setContentView(view);
+
+        ImageView imgProduct = view.findViewById(R.id.imgSheetProduct);
+        TextView tvName = view.findViewById(R.id.tvSheetName);
+        TextView tvPrice = view.findViewById(R.id.tvSheetPrice);
+        ImageView btnMinus = view.findViewById(R.id.btnMinus);
+        ImageView btnPlus = view.findViewById(R.id.btnPlus);
+        TextView tvQuantity = view.findViewById(R.id.tvQuantity);
+        Button btnConfirm = view.findViewById(R.id.btnConfirmAddToCart);
+
+        Glide.with(this).load(imageUrl).into(imgProduct);
+        tvName.setText(name);
+        tvPrice.setText(String.format("₫%,.0f VND", price));
+
+        final int[] quantity = {1};
+        tvQuantity.setText("1");
+
+        btnMinus.setOnClickListener(v -> {
+            if (quantity[0] > 1) {
+                quantity[0]--;
+                tvQuantity.setText(String.valueOf(quantity[0]));
+            }
+        });
+
+        btnPlus.setOnClickListener(v -> {
+            quantity[0]++;
+            tvQuantity.setText(String.valueOf(quantity[0]));
+        });
+
+        btnConfirm.setText("Mua ngay");
+
+        btnConfirm.setOnClickListener(v -> {
+            // Chuyển sang PaymentActivity với cartItem
+            Intent intent = new Intent(this, PaymentActivity.class);
+            CartItem item = new CartItem(productId, name, price, quantity[0], imageUrl);
+            intent.putExtra("cartItem", item); // Serializable
+            intent.putExtra("fromBuyNow", true);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     /*** GỌI API LẤY SỐ LƯỢNG GIỎ HÀNG ***/

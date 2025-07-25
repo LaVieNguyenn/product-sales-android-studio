@@ -40,7 +40,7 @@
         <activity android:name=".SpinWheelActivity"/>
         <activity android:name=".OrderDetailActivity"/>
         <activity android:name=".OrderHistoryActivity"/>
-
+        <activity android:name=".VoucherListActivity"/>
 
     </application>
 

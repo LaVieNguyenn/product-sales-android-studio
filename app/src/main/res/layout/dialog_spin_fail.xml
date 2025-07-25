@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/bg_dialog_rounded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/imgSadFace"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_sad_face" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rất tiếc!"
+        android:textColor="#E74C3C"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Còn nhiều phần quà hấp dẫn đang chờ bạn!"
+        android:textColor="#555"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="18dp"/>
+
+    <!-- Dòng thông báo phụ -->
+    <TextView
+        android:id="@+id/tvDescSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bạn đã hết lượt, săn thêm quà từ các chương trình Voucher Allora nhé!"
+        android:textColor="#888"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginBottom="12dp"/>
+
+</LinearLayout>
