@@ -2,6 +2,7 @@ package com.example.productsaleandroid;
 
 import android.content.*;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,8 @@ public class VoucherListActivity extends AppCompatActivity {
 
         rvVouchers = findViewById(R.id.rvVouchers);
         rvVouchers.setLayoutManager(new LinearLayoutManager(this));
-
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
         // Lấy token từ SharedPreferences
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         token = prefs.getString("token", "");

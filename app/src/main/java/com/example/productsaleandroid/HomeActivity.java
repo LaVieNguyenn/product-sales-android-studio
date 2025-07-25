@@ -91,6 +91,12 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, SpinWheelActivity.class);
             startActivity(intent);
         });
+        ImageView ivMessage = findViewById(R.id.ivMessage);
+        ivMessage.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("otherUserId", 6); // 2 là id của admin hoặc user khác
+            startActivity(intent);
+        });
 
         btnCloseSpin.setOnClickListener(v -> {
             // Dừng và ẩn
