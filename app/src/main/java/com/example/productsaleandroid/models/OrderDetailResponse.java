@@ -17,6 +17,7 @@ public class OrderDetailResponse {
         public int userId;
         public double totalPrice;
         public String status;
+        public double finalPrice;
         public List<CartItem> cartItems;
     }
 }

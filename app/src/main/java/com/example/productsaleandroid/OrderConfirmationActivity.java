@@ -109,15 +109,18 @@ public class OrderConfirmationActivity extends AppCompatActivity {
             adapter = new OrderProductAdapter(order.cart.cartItems);
             rvProducts.setAdapter(adapter);
 
-            // Tính tổng tiền
-            double total = 0;
-            for (CartItem item : order.cart.cartItems) {
-                total += item.price * item.quantity;
+            // Hiển thị finalPrice đã trừ voucher nếu có
+            if (order.cart.finalPrice > 0) {
+                tvTotal.setText("Tổng cộng: ₫" + String.format("%,.0f", order.cart.finalPrice));
+            } else {
+                double total = 0;
+                for (CartItem item : order.cart.cartItems) {
+                    total += item.price * item.quantity;
+                }
+                tvTotal.setText("Tổng cộng: ₫" + String.format("%,.0f", total));
             }
-            tvTotal.setText("Tổng cộng: ₫" + String.format("%,.0f", total));
         } else {
             tvTotal.setText("Tổng cộng: ₫0");
         }
     }
-
 }

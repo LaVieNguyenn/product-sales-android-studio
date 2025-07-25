@@ -6,6 +6,6 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface SpinApi {
-    @POST("spin")
+    @POST("/api/spin") // phải có /api/spin, không phải /spin
     Call<SpinResult> spin(@Header("Authorization") String token);
 }

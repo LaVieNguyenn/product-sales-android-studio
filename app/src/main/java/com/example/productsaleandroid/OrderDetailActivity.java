@@ -12,7 +12,6 @@ import com.example.productsaleandroid.api.ApiClient;
 import com.example.productsaleandroid.api.OrderApi;
 import com.example.productsaleandroid.models.CartItem;
 import com.example.productsaleandroid.models.OrderDetail;
-import com.example.productsaleandroid.models.OrderCartItem;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,9 +54,12 @@ public class OrderDetailActivity extends AppCompatActivity {
                             tvOrderStatus.setText("paid".equals(order.orderStatus) ? "Hoàn thành" : "Đang xử lý");
                             tvOrderInfo.setText("Phương thức: " + order.paymentMethod
                                     + " | Địa chỉ: " + order.billingAddress);
-                            tvTotalPrice.setText("Tổng cộng: ₫" + String.format("%,.0f", order.cart.totalPrice));
-                            List<CartItem> items = order.cart.items;
 
+                            // Hiển thị finalPrice nếu có, không thì lấy totalPrice
+                            double totalToShow = order.cart.finalPrice > 0 ? order.cart.finalPrice : order.cart.totalPrice;
+                            tvTotalPrice.setText("Tổng cộng: ₫" + String.format("%,.0f", totalToShow));
+
+                            List<CartItem> items = order.cart.cartItems;
                             recyclerOrderProducts.setLayoutManager(new LinearLayoutManager(OrderDetailActivity.this));
                             recyclerOrderProducts.setAdapter(new OrderProductsAdapter(items));
                         } else {

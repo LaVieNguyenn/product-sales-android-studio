@@ -16,8 +16,8 @@
 
         <!-- Nút back: icon lớn hơn, vùng bấm rộng hơn -->
         <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:padding="12dp"
         android:src="@drawable/ic_back"

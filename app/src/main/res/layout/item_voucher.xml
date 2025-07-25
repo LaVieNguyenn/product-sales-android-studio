@@ -1,0 +1,10 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="14dp"
+    android:background="@drawable/bg_rounded_light"
+    android:layout_marginBottom="10dp">
+    <TextView android:id="@+id/tvVoucherCode" android:text="Voucher: ..." android:textStyle="bold" android:textSize="16sp" android:textColor="#F4511E" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/tvDiscount" android:text="Giảm: 10%" android:textSize="14sp" android:textColor="#222" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/tvExpiry" android:text="HSD: ..." android:textSize="13sp" android:textColor="#666" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <Button android:id="@+id/btnApply" android:text="Áp dụng" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>
+</LinearLayout>
