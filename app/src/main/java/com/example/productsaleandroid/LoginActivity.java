@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -225,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         prefs.edit()
                 .putString("token", token)
+                .putInt("userId", user.getUserId())
                 .putString("user", new Gson().toJson(user))
                 .apply();
     }

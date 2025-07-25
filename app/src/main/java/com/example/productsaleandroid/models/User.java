@@ -1,6 +1,10 @@
 package com.example.productsaleandroid.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
+    @SerializedName("userId")
+    private int userId;
     private String username;
     private String email;
     private String phoneNumber;
@@ -13,10 +17,10 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
-
-    // ... các constructor khác, getter/setter nếu cần
-
     // Getter & Setter
+    public int getUserId() {
+        return userId;
+    }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
