@@ -54,6 +54,9 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
     // Glide (hỗ trợ load ảnh từ url)
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
