@@ -95,6 +95,60 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <!-- Store Address Section -->
+    <LinearLayout
+        android:id="@+id/layoutStoreAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#F6F6F6"
+        android:padding="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_location"
+            android:tint="#43A047"
+            android:contentDescription="Location" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tvStoreName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cửa hàng Allora"
+                android:textColor="#222"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvStoreAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7 Đ. D1, Long Thạnh Mỹ, Thủ Đức, Hồ Chí Minh"
+                android:textColor="#555"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnMapDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Xem bản đồ"
+            android:textSize="13sp"
+            android:textColor="#FFF"
+            android:backgroundTint="#43A047"
+            android:paddingHorizontal="12dp"
+            android:textAllCaps="false"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
